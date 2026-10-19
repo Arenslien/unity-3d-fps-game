@@ -14,21 +14,19 @@ public class CameraRotate : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
-        Debug.Log($"mouseX : {mouseX}, mouseY : {mouseY}");
+        // Todo: Unity 조건부 실행 어트리뷰트 : Conditional Attribute
+        GameLogger.Log($"mouseX : {mouseX}, mouseY : {mouseY}");
 
         // 2. 마우스 입력에 따라 회전할 방향을 구한다.
-
         // - 마우스 입력값 누적
-        Vector3 direction = new Vector3(-mouseY, mouseX, 0);
         _accumulationX += mouseX * _rotationSpeed * Time.deltaTime;
         _accumulationY += -mouseY * _rotationSpeed * Time.deltaTime;
-
-        // 누적한 회전값 카메라에 적용
-        transform.eulerAngles = new Vector3(_accumulationY, _accumulationX);
 
         // 누적하기 전에 내 변수에서 먼저 -90 ~ 90도로 제한
         _accumulationY = Mathf.Clamp(_accumulationY, -90, 90);
 
+        // 누적한 회전값 카메라에 적용
+        transform.eulerAngles = new Vector3(_accumulationY, _accumulationX);
 
         // 3. 그 방향으로 회전시킨다.
         // - 새로운 각도 = 현재 각도 + 회전 속도 * 시간
