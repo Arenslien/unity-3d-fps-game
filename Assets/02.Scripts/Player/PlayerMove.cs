@@ -32,14 +32,9 @@ public class PlayerMove : MonoBehaviour
         // Global 좌표계: 세상을 중심
 
         // 3. 중력을 누적한다. --> 땅에 서 있지 않을 때만 누적
-        if (!_characterController.isGrounded)
-        {
-            _yVelocity += Gravity * Time.deltaTime;
-        }
-        else
-        {
-            _yVelocity = 0f;
-        }
+        _yVelocity = !_characterController.isGrounded
+            ? _yVelocity + Gravity * Time.deltaTime
+            : 0f;
 
         // 4. 만약 점프 키를 누르면 점프
         if (Input.GetButtonDown("Jump")) // 중재자 패턴
