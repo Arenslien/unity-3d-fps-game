@@ -7,12 +7,18 @@ public class PlayerGunFire : MonoBehaviour
 
     private float _range = 100f;
     private float _damage = 10f;
+    private float _fireInterval = 0.1f; // 발사 속도
+    private float _fireTimer = 0f;
 
     private void Update()
     {
+        // 0. 발사 타이머를 지난 시간만큼 줄인다.
+        _fireTimer -= Time.deltaTime;
+
         // 1. 마우스 왼쪽 버튼 입력 받기
-        if (Input.GetButtonDown("Fire1")) // 0(왼), 1(오), 2(휠) 
+        if (Input.GetButton("Fire1") && _fireTimer <= 0f) // 0(왼), 1(오), 2(휠) 
         {
+            _fireTimer = _fireInterval;
             Shoot();
         }
     }
