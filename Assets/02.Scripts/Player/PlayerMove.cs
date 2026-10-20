@@ -6,6 +6,8 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float _moveSpeed = 7f;
     [SerializeField] private float _jumpPower = 7f;
     private CharacterController _characterController;
+    private PlayerStamina _playerStamina;
+    private bool _isSprinting = false;
 
     // 현재 속도
     private Vector3 _currentVelocity = Vector3.zero;
@@ -20,12 +22,43 @@ public class PlayerMove : MonoBehaviour
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
+        _playerStamina = GetComponent<PlayerStamina>();
     }
 
     private void Update()
     {
-        Jump();
+        // 1. 질주
+        if (Input.GetKey(KeyCode.LeftShift) && _playerStamina.Gauge > 0f)
+        {
+            StartSprint();
+            _playerStamina.UseGauge(2.0f * Time.deltaTime);
+            _isSprinting = true;
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            EndSprint();
+            _isSprinting = false;
+        }
+
+        // 2. 점프
+        if (Input.GetButtonDown("Jump") && _jumpCount < 2 && _playerStamina.Gauge > 1f)
+        {
+            Jump();
+            _playerStamina.UseGauge(3f); // 스태미나 차감
+        }
+
+        // 3. 매 프레임마다 항상 해야할 것
         Move();
+        ApplyGravity();
+
+        // 스태미나 회복
+        if (!_isSprinting)
+        {
+            _playerStamina.RestoreGauge(2.0f * Time.deltaTime);
+        }
+
+        Debug.Log($"현재 스태미나: {_playerStamina.Gauge}");
     }
 
     private void Move()
@@ -50,7 +83,7 @@ public class PlayerMove : MonoBehaviour
         _characterController.Move(_currentVelocity * Time.deltaTime);
     }
 
-    private void Jump()
+    private void ApplyGravity()
     {
         // 1. 중력 적용 및 중력과 점프 횟수 초기화
         if (!_characterController.isGrounded)
@@ -62,13 +95,23 @@ public class PlayerMove : MonoBehaviour
             _yVelocity = 0f;
             _jumpCount = 0;
         }
+    }
 
-        // 2. 만약 점프 키를 누르면 점프
-        if (Input.GetButtonDown("Jump") && _jumpCount < 2) // 중재자 패턴
-        {
-            Debug.Log("점프");
-            _yVelocity = _jumpPower;
-            _jumpCount++;
-        }
+    private void Jump()
+    {
+        // 1. 점프
+        Debug.Log("점프");
+        _yVelocity = _jumpPower;
+        _jumpCount++;
+    }
+
+    public void StartSprint()
+    {
+        _moveSpeed = 12f;
+    }
+
+    public void EndSprint()
+    {
+        _moveSpeed = 7f;
     }
 }
