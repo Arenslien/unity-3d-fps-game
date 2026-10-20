@@ -15,7 +15,7 @@ public class CameraRotate : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y");
 
         // Todo: Unity 조건부 실행 어트리뷰트 : Conditional Attribute
-        GameLogger.Log($"mouseX : {mouseX}, mouseY : {mouseY}");
+        // GameLogger.Log($"mouseX : {mouseX}, mouseY : {mouseY}");
 
         // 2. 마우스 입력에 따라 회전할 방향을 구한다.
         // - 마우스 입력값 누적
