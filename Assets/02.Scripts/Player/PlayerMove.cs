@@ -35,6 +35,9 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
+        // 0. 스태미나 회복
+        _stamina = Mathf.Min(MaxStamina, _stamina + _staminaRecovery * Time.deltaTime);
+
         // 1. 키보드 입력을 받는다.
         float h = Input.GetAxisRaw("Horizontal"); // -1, 0, 1
         float v = Input.GetAxisRaw("Vertical"); // -1, 0, 1
