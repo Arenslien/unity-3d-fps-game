@@ -10,7 +10,18 @@ public class Bomb : MonoBehaviour
         ParticleSystem effect = Instantiate(_explosionEffectPrefab, transform.position, Quaternion.identity);
         effect.Play();
 
-        // Todo: 오브젝트 풀링 적용
-        Destroy(gameObject);
+        PlayerBombPool.Instance.ReturnBomb(this);
+    }
+
+    public void Activate(Transform firePoint)
+    {
+        gameObject.SetActive(true);
+        transform.position = firePoint.position;
+        transform.rotation = Quaternion.identity;
+    }
+
+    public void Deactivate()
+    {
+        gameObject.SetActive(false);
     }
 }
