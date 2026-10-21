@@ -26,17 +26,20 @@ public class PlayerMove : MonoBehaviour
     // 스태미나
     private float _stamina = 0f;
     private const float MaxStamina = 100f;
+    private PlayerStamina _playerStamina;
 
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
         _stamina = MaxStamina;
+        _playerStamina = GetComponent<PlayerStamina>();
     }
 
     private void Update()
     {
         // 0. 스태미나 회복
         _stamina = Mathf.Min(MaxStamina, _stamina + _staminaRecovery * Time.deltaTime);
+        _playerStamina.SetGauge(_stamina);
 
         // 1. 키보드 입력을 받는다.
         float h = Input.GetAxisRaw("Horizontal"); // -1, 0, 1
@@ -66,6 +69,7 @@ public class PlayerMove : MonoBehaviour
             _jumpCount++;
             _yVelocity = _jumpPower;
             _stamina -= _jumpCost;
+            _playerStamina.SetGauge(_stamina);
         }
 
         // 5. 속도를 구한다.
