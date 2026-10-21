@@ -18,8 +18,8 @@ public class PlayerGunFire : MonoBehaviour
     private int _bulletCount = 0;
     private const float ReloadingTime = 3f;
 
-    // 재장전
-    private Awaitable _reloadAwaitable = null;
+    // 재장전 코루틴
+    private Coroutine _reloadCoroutine = null;
 
     private void Awake()
     {
@@ -38,18 +38,18 @@ public class PlayerGunFire : MonoBehaviour
             Shoot();
 
             // StopAllCoroutines();
-            if (_reloadAwaitable != null)
+            if (_reloadCoroutine != null)
             {
-                _reloadAwaitable.Cancel();
-                _reloadAwaitable = null;
+                StopCoroutine(_reloadCoroutine);
+                _reloadCoroutine = null;
                 Debug.Log("재장전 취소!");
             }
         }
 
         // 2. 장전 기능
-        if (Input.GetButtonDown("Reload") && _reloadAwaitable == null)
+        if (Input.GetButtonDown("Reload") && _reloadCoroutine == null)
         {
-            _reloadAwaitable = ReloadAsync();
+            _reloadCoroutine = StartCoroutine(Reload_Coroutine());
         }
     }
 
@@ -77,15 +77,14 @@ public class PlayerGunFire : MonoBehaviour
         _bulletCount--;
     }
 
-    private async Awaitable ReloadAsync()
+    private IEnumerator Reload_Coroutine()
     {
         Debug.Log("재장전 시작");
 
-        await Awaitable.WaitForSecondsAsync(ReloadingTime);
-        // yield return new WaitForSeconds(ReloadingTime);
+        yield return new WaitForSeconds(ReloadingTime);
 
         _bulletCount = _maxBulletCount;
-        _reloadAwaitable = null;
+        _reloadCoroutine = null;
 
         Debug.Log("재장전 종료");
     }
