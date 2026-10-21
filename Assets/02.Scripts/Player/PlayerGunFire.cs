@@ -6,16 +6,22 @@ public class PlayerGunFire : MonoBehaviour
 {
     [SerializeField] private ParticleSystem _hitEffectPrefab;
 
-    private float _range = 100f;
-    private float _damage = 10f;
-    private float _fireInterval = 0.1f; // 발사 속도
+    [Header("스탯")]
+    [SerializeField] private float _range = 100f;
+
+    [SerializeField] private float _damage = 10f;
+    [SerializeField] private float _fireInterval = 0.1f; // 발사 속도
     private float _fireTimer = 0f;
 
     // 탄창 기능
-    private int _maxBulletCount = 50;
-    private int _bulletCount;
+    [SerializeField] private int _maxBulletCount = 30;
+    private int _bulletCount = 0;
 
-    private void Start()
+    [SerializeField] private float _reloadTime = 3f;
+    private bool _isReloading = false;
+    private float _reloadTimer = 0f;
+
+    private void Awake()
     {
         _bulletCount = _maxBulletCount;
     }
@@ -33,9 +39,21 @@ public class PlayerGunFire : MonoBehaviour
         }
 
         // 2. 장전 기능
-        if (Input.GetButtonDown("Reload"))
+        if (Input.GetButtonDown("Reload") && !_isReloading)
         {
-            Reload();
+            _isReloading = true;
+            _reloadTimer = 0f;
+        }
+
+        if (_isReloading)
+        {
+            _reloadTimer += Time.deltaTime;
+
+            if (_reloadTimer >= _reloadTime)
+            {
+                _isReloading = false;
+                Reload();
+            }
         }
     }
 
