@@ -1,4 +1,4 @@
-using Unity.VisualScripting.Dependencies.NCalc;
+using System.Collections;
 using UnityEngine;
 
 // 목표: 마우스 왼쪽 버튼 클릭 시 - 바라보는 방향으로 총알 발사
@@ -16,10 +16,7 @@ public class PlayerGunFire : MonoBehaviour
     // 탄창 기능
     [SerializeField] private int _maxBulletCount = 30;
     private int _bulletCount = 0;
-
-    [SerializeField] private float _reloadTime = 3f;
-    private bool _isReloading = false;
-    private float _reloadTimer = 0f;
+    private const float ReloadingTime = 3f;
 
     private void Awake()
     {
@@ -39,21 +36,9 @@ public class PlayerGunFire : MonoBehaviour
         }
 
         // 2. 장전 기능
-        if (Input.GetButtonDown("Reload") && !_isReloading)
+        if (Input.GetButtonDown("Reload"))
         {
-            _isReloading = true;
-            _reloadTimer = 0f;
-        }
-
-        if (_isReloading)
-        {
-            _reloadTimer += Time.deltaTime;
-
-            if (_reloadTimer >= _reloadTime)
-            {
-                _isReloading = false;
-                Reload();
-            }
+            StartCoroutine(Reloading());
         }
     }
 
@@ -81,9 +66,14 @@ public class PlayerGunFire : MonoBehaviour
         _bulletCount--;
     }
 
-    private void Reload()
+    private IEnumerator Reloading()
     {
-        Debug.Log("재장전");
+        Debug.Log("재장전 시작");
+
+        yield return new WaitForSeconds(ReloadingTime);
+
         _bulletCount = _maxBulletCount;
+
+        Debug.Log("재장전 종료");
     }
 }
