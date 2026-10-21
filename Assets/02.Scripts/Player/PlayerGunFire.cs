@@ -18,6 +18,9 @@ public class PlayerGunFire : MonoBehaviour
     private int _bulletCount = 0;
     private const float ReloadingTime = 3f;
 
+    // 재장전 코루틴
+    private Coroutine _reloadCoroutine = null;
+
     private void Awake()
     {
         _bulletCount = _maxBulletCount;
@@ -33,12 +36,20 @@ public class PlayerGunFire : MonoBehaviour
         {
             _fireTimer = _fireInterval;
             Shoot();
+
+            // StopAllCoroutines();
+            if (_reloadCoroutine != null)
+            {
+                StopCoroutine(_reloadCoroutine);
+                _reloadCoroutine = null;
+                Debug.Log("재장전 취소!");
+            }
         }
 
         // 2. 장전 기능
-        if (Input.GetButtonDown("Reload"))
+        if (Input.GetButtonDown("Reload") && _reloadCoroutine == null)
         {
-            StartCoroutine(Reloading());
+            _reloadCoroutine = StartCoroutine(Reload_Coroutine());
         }
     }
 
@@ -66,13 +77,14 @@ public class PlayerGunFire : MonoBehaviour
         _bulletCount--;
     }
 
-    private IEnumerator Reloading()
+    private IEnumerator Reload_Coroutine()
     {
         Debug.Log("재장전 시작");
 
         yield return new WaitForSeconds(ReloadingTime);
 
         _bulletCount = _maxBulletCount;
+        _reloadCoroutine = null;
 
         Debug.Log("재장전 종료");
     }
