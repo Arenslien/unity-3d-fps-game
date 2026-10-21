@@ -1,3 +1,4 @@
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 // 목표: 마우스 왼쪽 버튼 클릭 시 - 바라보는 방향으로 총알 발사
@@ -10,16 +11,31 @@ public class PlayerGunFire : MonoBehaviour
     private float _fireInterval = 0.1f; // 발사 속도
     private float _fireTimer = 0f;
 
+    // 탄창 기능
+    private int _maxBulletCount = 50;
+    private int _bulletCount;
+
+    private void Start()
+    {
+        _bulletCount = _maxBulletCount;
+    }
+
     private void Update()
     {
         // 0. 발사 타이머를 지난 시간만큼 줄인다.
         _fireTimer -= Time.deltaTime;
 
         // 1. 마우스 왼쪽 버튼 입력 받기
-        if (Input.GetButton("Fire1") && _fireTimer <= 0f) // 0(왼), 1(오), 2(휠) 
+        if (Input.GetButton("Fire1") && _fireTimer <= 0f && _bulletCount > 0) // 0(왼), 1(오), 2(휠) 
         {
             _fireTimer = _fireInterval;
             Shoot();
+        }
+
+        // 2. 장전 기능
+        if (Input.GetButtonDown("Reload"))
+        {
+            Reload();
         }
     }
 
@@ -42,5 +58,14 @@ public class PlayerGunFire : MonoBehaviour
             effect.transform.forward = hitInfo.normal;
             effect.Play();
         }
+
+        // 5. 총알 소모
+        _bulletCount--;
+    }
+
+    private void Reload()
+    {
+        Debug.Log("재장전");
+        _bulletCount = _maxBulletCount;
     }
 }
