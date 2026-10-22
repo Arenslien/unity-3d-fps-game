@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 // 목표: 마우스 왼쪽 버튼 클릭 시 - 바라보는 방향으로 총알 발사

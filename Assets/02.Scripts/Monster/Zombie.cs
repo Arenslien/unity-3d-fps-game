@@ -6,19 +6,18 @@ using UnityEngine;
 // 좀비가 가질 수 있는 상태
 public enum ZombieState
 {
-    Idle, // 대기: 제자리에서 플레이어를 기다린다.
-    Trace, // 추격: 플레이어를 쫓아간다.
-    Comeback, // 복귀: 처음 자리로 돌아간다.
-    Attack, // 공격: 일정 시간마다 플레이어를 때린다.
-    Hit, // 피격: 공격(총알, 폭탄)을 받아 잠깐 멈칫한다.
-    Death // 죽음: 쓰러지고 잠시 뒤 사라진다.
+    Idle,       // 대기: 제자리에서 플레이어를 기다린다.
+    Trace,      // 추격: 플레이어를 쫓아간다.
+    Comeback,   // 복귀: 처음 자리로 돌아간다.
+    Attack,     // 공격: 일정 시간마다 플레이어를 때린다.
+    Hit,        // 피격: 공격(총알, 폭탄)을 받아 잠깐 멈칫한다.
+    Death       // 죽음: 쓰러지고 잠시 뒤 사라진다.
 }
 
 public class Zombie : MonoBehaviour
 {
     [Header("스탯")]
     [SerializeField] private float _detectDistance = 8f; // 플레이어를 발견하는 거리
-
     [SerializeField] private float _combackDistance = 15f; // 처음 자리에서 멀어지면 돌아가는 거리
     [SerializeField] private float _attackRange = 1.5f; // 공격 범위
     [SerializeField] private float _attackInterval = 1.2f; // 공격 간격
