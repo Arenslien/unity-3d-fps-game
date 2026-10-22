@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 // 목표: 마우스 왼쪽 버튼 클릭 시 - 바라보는 방향으로 총알 발사
@@ -71,6 +72,15 @@ public class PlayerGunFire : MonoBehaviour
             effect.transform.position = hitInfo.point;
             effect.transform.forward = hitInfo.normal;
             effect.Play();
+
+            Debug.Log($"{hitInfo}");
+            Debug.Log($"{hitInfo.collider}");
+
+            // hitInfo.collider.GetComponent<Zombie>()?.TakeDamage(_damage);
+            if (hitInfo.collider.TryGetComponent(out Zombie zombie))
+            {
+                zombie.TakeDamage(_damage);
+            }
         }
 
         // 5. 총알 소모
