@@ -80,6 +80,8 @@ public class PlayerGunFire : MonoBehaviour
             {
                 zombie.TakeDamage(_damage);
             }
+
+            hitInfo.collider.GetComponent<Drum>()?.Hit(_damage);
         }
 
         // 5. 총알 소모
