@@ -1171,7 +1171,7 @@ GameObject:
   - component: {fileID: 660924298}
   - component: {fileID: 660924297}
   - component: {fileID: 660924301}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1579,7 +1579,7 @@ GameObject:
   - component: {fileID: 956594766}
   - component: {fileID: 956594765}
   - component: {fileID: 956594764}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Nose
   m_TagString: Untagged
   m_Icon: {fileID: 0}
