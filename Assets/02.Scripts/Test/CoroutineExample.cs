@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class CoroutineTest : MonoBehaviour
+public class CoroutineExample : MonoBehaviour
 {
     // 매 초마다 : "시작" --> "1초!" --> "2초!" --> "3초!" 센 이후 "나로호 발사!" 로그 출력
 
