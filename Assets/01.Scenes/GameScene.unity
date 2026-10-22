@@ -316,7 +316,6 @@ MonoBehaviour:
   _damage: 10
   _fireInterval: 0.1
   _maxBulletCount: 50
-  _reloadTime: 3
 --- !u!114 &22159670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1126,7 +1125,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 547020503}
   m_CullTransparentMesh: 1
---- !u!1 &610093256
+--- !u!1 &560275348
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1134,34 +1133,34 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 610093258}
-  - component: {fileID: 610093257}
+  - component: {fileID: 560275350}
+  - component: {fileID: 560275349}
   m_Layer: 0
-  m_Name: CoroutineTest
+  m_Name: DictionaryExample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &610093257
+--- !u!114 &560275349
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610093256}
+  m_GameObject: {fileID: 560275348}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cba7fbab132db8478b27c2cafc4d929, type: 3}
+  m_Script: {fileID: 11500000, guid: d22a1e34902199742a77e8b25660eb33, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CoroutineTest
---- !u!4 &610093258
+  m_EditorClassIdentifier: Assembly-CSharp::DictionaryExample
+--- !u!4 &560275350
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610093256}
+  m_GameObject: {fileID: 560275348}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -2396,4 +2395,4 @@ SceneRoots:
   - {fileID: 1770641719}
   - {fileID: 1222743365}
   - {fileID: 1199960261}
-  - {fileID: 610093258}
+  - {fileID: 560275350}
