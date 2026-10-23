@@ -10,7 +10,7 @@ public class UI_PlayerStats : MonoBehaviour
 
     private void LateUpdate()
     {
-        // _healthSlider.value = 플레이어 체력 / 플레이어 최대 체력;
+        _healthSlider.value = _player.Health / _player.MaxHealth;
         _staminaSlider.value = _player.Stamina / Player.MaxStamina;
     }
 }

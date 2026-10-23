@@ -180,6 +180,7 @@ public class Zombie : MonoBehaviour, IDamageable
         {
             Debug.Log($"{_state} -> Trace");
             _state = ZombieState.Trace;
+            return;
         }
 
         _attackTimer += Time.deltaTime;
