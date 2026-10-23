@@ -72,9 +72,6 @@ public class PlayerGunFire : MonoBehaviour
             effect.transform.forward = hitInfo.normal;
             effect.Play();
 
-            Debug.Log($"{hitInfo}");
-            Debug.Log($"{hitInfo.collider}");
-
             DamageInfo damageInfo = new DamageInfo();
             damageInfo.Damage = _damage;
             damageInfo.hitPoint = hitInfo.point;

@@ -1,0 +1,29 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ZombieHealthBar : MonoBehaviour
+{
+    [Header("슬라이더")]
+    [SerializeField] private Slider _slider;
+
+    private Zombie _zombie;
+
+    private void Awake()
+    {
+        if (_slider == null)
+        {
+            Debug.Log("[ZombieHealthBar.cs] - Slider is null");
+        }
+
+        _zombie = GetComponent<Zombie>();
+    }
+
+    private void LateUpdate()
+    {
+        // 0 ~ 100% --> 0 ~ 1
+        _slider.value = _zombie.Health / _zombie.MaxHealth;
+
+        // 빌보드: 체력바가 카메라를 쳐다보게 한다.
+        transform.forward = Camera.main.transform.forward;
+    }
+}
