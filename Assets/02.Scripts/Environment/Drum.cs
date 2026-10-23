@@ -24,11 +24,11 @@ public class Drum : MonoBehaviour, IDamageable
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(DamageInfo damageInfo)
     {
-        if (damage < 0 || _health <= 0) return;
+        if (damageInfo.Damage < 0 || _health <= 0) return;
 
-        _health -= damage;
+        _health -= damageInfo.Damage;
 
         if (_health <= 0)
         {
@@ -64,10 +64,13 @@ public class Drum : MonoBehaviour, IDamageable
         Collider[] colliders =
             Physics.OverlapSphere(transform.position, _explosionRange, LayerMask.GetMask("Drum", "Zombie"));
 
+        DamageInfo damageInfo = new DamageInfo();
+        damageInfo.Damage = _damage;
+
         // 1. 드럼통들에게 대미지를 준다.
         foreach (Collider collider in colliders)
         {
-            collider.GetComponent<IDamageable>()?.TakeDamage(_damage);
+            collider.GetComponent<IDamageable>()?.TakeDamage(damageInfo);
         }
     }
 }

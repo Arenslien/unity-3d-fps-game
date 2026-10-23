@@ -75,7 +75,12 @@ public class PlayerGunFire : MonoBehaviour
             Debug.Log($"{hitInfo}");
             Debug.Log($"{hitInfo.collider}");
 
-            hitInfo.collider.GetComponent<IDamageable>()?.TakeDamage(_damage);
+            DamageInfo damageInfo = new DamageInfo();
+            damageInfo.Damage = _damage;
+            damageInfo.hitPoint = hitInfo.point;
+            damageInfo.hitNormal = hitInfo.normal;
+
+            hitInfo.collider.GetComponent<IDamageable>()?.TakeDamage(damageInfo);
 
             // hitInfo.collider.GetComponent<Zombie>()?.TakeDamage(_damage);
             // if (hitInfo.collider.TryGetComponent(out Zombie zombie))
