@@ -29,9 +29,6 @@ public class Zombie : MonoBehaviour, IDamageable
     [Header("이펙트")]
     [SerializeField] private GameObject _bloodSprayPrefab;
 
-    // 플레이어 체력 바
-    private PlayerHealthBar _playerHealthBar;
-
     private float _attackTimer = 1.2f;
     private CharacterController _controller;
     private Vector3 _startPosition;
@@ -51,7 +48,6 @@ public class Zombie : MonoBehaviour, IDamageable
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
-        _playerHealthBar = _player.GetComponent<PlayerHealthBar>();
     }
 
     private void Update()
@@ -194,7 +190,7 @@ public class Zombie : MonoBehaviour, IDamageable
             DamageInfo damageInfo = new DamageInfo();
             damageInfo.Damage = _damage;
 
-            _playerHealthBar.TakeDamage(damageInfo);
+            _player.GetComponent<Player>().TakeDamage(damageInfo);
             _attackTimer = 0f;
         }
     }

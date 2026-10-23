@@ -19,27 +19,28 @@ public class PlayerMove : MonoBehaviour
     private const float Gravity = -20f;
     private float _yVelocity = 0f; // Y축 속도: 매 프레임마다 
 
-    // 점프
+    // 점프 및 달리기
     private int _jumpCount = 0;
     private const int MaxJumps = 2;
+    private bool _isSprint = false;
 
-    // 스태미나
-    private float _stamina = 0f;
-    private const float MaxStamina = 100f;
-    private PlayerStamina _playerStamina;
+    // 플레이어
+    private Player _player;
 
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
-        _stamina = MaxStamina;
-        _playerStamina = GetComponent<PlayerStamina>();
+        _player = GetComponent<Player>();
     }
 
     private void Update()
     {
         // 0. 스태미나 회복
-        _stamina = Mathf.Min(MaxStamina, _stamina + _staminaRecovery * Time.deltaTime);
-        _playerStamina.SetGauge(_stamina);
+        if (!_isSprint)
+        {
+            float stamina = Mathf.Min(Player.MaxStamina, _player.Stamina + _staminaRecovery * Time.deltaTime);
+            _player.SetStamina(stamina);
+        }
 
         // 1. 키보드 입력을 받는다.
         float h = Input.GetAxisRaw("Horizontal"); // -1, 0, 1
@@ -64,23 +65,22 @@ public class PlayerMove : MonoBehaviour
         }
 
         // 4. 만약 점프 키를 누르면 점프
-        if (Input.GetButtonDown("Jump") && _jumpCount < MaxJumps && _stamina >= _jumpCost) // 중재자 패턴
+        if (Input.GetButtonDown("Jump") && _jumpCount < MaxJumps && _player.Stamina >= _jumpCost) // 중재자 패턴
         {
             _jumpCount++;
             _yVelocity = _jumpPower;
-            _stamina -= _jumpCost;
-            _playerStamina.SetGauge(_stamina);
+            _player.UseStamina(_jumpCost);
         }
 
         // 5. 속도를 구한다.
         float requiredStamina = _sprintCost * Time.deltaTime;
-        bool isSprint = Input.GetButton("Sprint") && _stamina > requiredStamina;
+        _isSprint = Input.GetButton("Sprint") && _player.Stamina > requiredStamina;
         float currentSpeed = _moveSpeed;
 
-        if (isSprint)
+        if (_isSprint)
         {
             currentSpeed = _sprintSpeed;
-            _stamina -= requiredStamina;
+            _player.UseStamina(requiredStamina);
         }
 
         Vector3 velocity = direction * currentSpeed;
