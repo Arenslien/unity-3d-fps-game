@@ -75,14 +75,16 @@ public class PlayerGunFire : MonoBehaviour
             Debug.Log($"{hitInfo}");
             Debug.Log($"{hitInfo.collider}");
 
-            // hitInfo.collider.GetComponent<Zombie>()?.TakeDamage(_damage);
-            if (hitInfo.collider.TryGetComponent(out Zombie zombie))
-            {
-                zombie.TakeDamage(_damage);
-            }
+            hitInfo.collider.GetComponent<IDamageable>()?.TakeDamage(_damage);
 
-            hitInfo.collider.GetComponent<Drum>()?.TakeDamage(_damage);
-            hitInfo.collider.GetComponent<Box>()?.TakeDamage(_damage);
+            // hitInfo.collider.GetComponent<Zombie>()?.TakeDamage(_damage);
+            // if (hitInfo.collider.TryGetComponent(out Zombie zombie))
+            // {
+            //     zombie.TakeDamage(_damage);
+            // }
+            //
+            // hitInfo.collider.GetComponent<Drum>()?.TakeDamage(_damage);
+            // hitInfo.collider.GetComponent<Box>()?.TakeDamage(_damage);
         }
 
         // 5. 총알 소모
