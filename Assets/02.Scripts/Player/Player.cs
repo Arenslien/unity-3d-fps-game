@@ -28,6 +28,11 @@ public class Player : MonoBehaviour, IDamageable
         _uiHitEffect.Fade(0.7f);
 
         Debug.Log($"[Player.cs] - 플레이어 피격 당함. HP: {_health}/{_maxHealth}");
+
+        if (_health <= 0)
+        {
+            GameManager.Instance.GameOver();
+        }
     }
 
     public void SetStamina(float value)
