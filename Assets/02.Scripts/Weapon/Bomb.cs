@@ -37,12 +37,17 @@ public class Bomb : MonoBehaviour
         Collider[] colliders =
             Physics.OverlapSphere(transform.position, _explosionRange, LayerMask.GetMask("Drum", "Zombie"));
 
-        DamageInfo damageInfo = new DamageInfo();
-        damageInfo.Damage = _damage;
+        // Unity의 Collider.ClosestPoint
+        // - 지정한 위치(주어진 위치)에서 해당 콜라이더(Collider)의 표면 또는 내부에서
+        // - 가장 가까운 지점의 좌표를 반환하는 함수
 
         // 1. 드럼통들에게 대미지를 준다.
         foreach (Collider collider in colliders)
         {
+            DamageInfo damageInfo = new DamageInfo();
+            damageInfo.Damage = _damage;
+            damageInfo.hitPoint = collider.ClosestPoint(transform.position);
+            damageInfo.hitNormal = (transform.position - collider.ClosestPoint(transform.position)).normalized;
             collider.GetComponent<IDamageable>()?.TakeDamage(damageInfo);
         }
     }
