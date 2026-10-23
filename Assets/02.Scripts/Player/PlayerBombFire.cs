@@ -18,6 +18,8 @@ public class PlayerBombFire : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.State != GameState.Playing) return;
+
         // 1. 마우스 오른쪽 버튼 길게 누를 수록 게이지 충전
         if (Input.GetButton("Fire2") && _bombGauge < MaxBombGauge)
         {
