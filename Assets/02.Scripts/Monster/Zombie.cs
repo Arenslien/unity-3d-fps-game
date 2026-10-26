@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -39,6 +40,10 @@ public class Zombie : MonoBehaviour, IDamageable
 
     private ZombieState _state = ZombieState.Idle;
 
+    // Zombie Event Action
+    public event Action OnDamaged = null;
+    public event Action OnDeath = null;
+
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
@@ -48,6 +53,8 @@ public class Zombie : MonoBehaviour, IDamageable
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
+
+        OnDeath += ZombieManager.Instance.DecreaseZombie;
     }
 
     private void Update()
@@ -67,6 +74,9 @@ public class Zombie : MonoBehaviour, IDamageable
                 break;
             case ZombieState.Attack:
                 Attack();
+                break;
+            case ZombieState.Death:
+                Death();
                 break;
         }
     }
@@ -196,5 +206,10 @@ public class Zombie : MonoBehaviour, IDamageable
             _player.GetComponent<Player>().TakeDamage(damageInfo);
             _attackTimer = 0f;
         }
+    }
+
+    private void Death()
+    {
+        OnDeath?.Invoke();
     }
 }
