@@ -3,19 +3,22 @@ using UnityEngine.UI;
 
 public class ZombieHealthBar : MonoBehaviour
 {
-    [Header("슬라이더")]
-    [SerializeField] private Slider _slider;
+    private Slider _slider;
 
     private Zombie _zombie;
 
     private void Awake()
     {
+        _slider = GetComponentInChildren<Slider>(true);
+        _zombie = GetComponent<Zombie>();
+    }
+
+    private void Start()
+    {
         if (_slider == null)
         {
             Debug.Log("[ZombieHealthBar.cs] - Slider is null");
         }
-
-        _zombie = GetComponent<Zombie>();
     }
 
     private void LateUpdate()

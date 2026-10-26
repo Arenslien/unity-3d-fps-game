@@ -304,7 +304,7 @@ MonoBehaviour:
   _attackRange: 1.5
   _attackInterval: 1.2
   _moveSpeed: 5
-  _maxHealth: 30
+  _maxHealth: 50
   _health: 50
   _damage: 10
   _bloodSprayPrefab: {fileID: 1000013355911406, guid: d32aa916f50cac94db11e6f19821a58f, type: 3}
@@ -320,7 +320,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9de07aaa9ecd0a4a941a3310d7fe779, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombieHealthBar
-  _slider: {fileID: 0}
 --- !u!1 &4366880707447602994
 GameObject:
   m_ObjectHideFlags: 0
