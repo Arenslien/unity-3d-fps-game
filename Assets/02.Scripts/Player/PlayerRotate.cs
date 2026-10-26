@@ -8,7 +8,8 @@ public class PlayerRotate : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.State != GameState.Playing) return;
+        bool isMouseVisible = Cursor.visible;
+        if (GameManager.Instance.State != GameState.Playing || isMouseVisible) return;
 
         float mouseX = Input.GetAxis("Mouse X");
 

@@ -31,6 +31,4 @@ public class MinimapCamera : MonoBehaviour
     {
         _camera.orthographicSize += 1;
     }
-
-    // Todo. +, - 버튼 누를 때 Zoom In / Zoom Out 기능 구현하기
 }

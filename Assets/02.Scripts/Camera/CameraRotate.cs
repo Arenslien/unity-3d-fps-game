@@ -10,7 +10,8 @@ public class CameraRotate : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.State != GameState.Playing) return;
+        bool isMouseVisible = Cursor.visible;
+        if (GameManager.Instance.State != GameState.Playing || isMouseVisible) return;
 
         // 1. 마우스 입력을 받는다.
         float mouseX = Input.GetAxis("Mouse X");
