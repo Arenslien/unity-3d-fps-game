@@ -6,6 +6,24 @@ public class MinimapCamera : MonoBehaviour
     [SerializeField] private Transform _target;
     [SerializeField] private float _height = 8f;
 
+    private Camera _camera;
+
+    private void Awake()
+    {
+        _camera = GetComponent<Camera>();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            _camera.orthographicSize -= 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            _camera.orthographicSize += 1;
+        }
+    }
 
     private void LateUpdate()
     {
