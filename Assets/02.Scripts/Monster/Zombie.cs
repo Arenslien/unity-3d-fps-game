@@ -8,6 +8,8 @@ using UnityEngine;
 public enum ZombieState
 {
     Idle,       // 대기: 제자리에서 플레이어를 기다린다.
+    Patrol,     // 정찰: 정찰 roaming Position 근처를 배회
+    Roaming,    // 로밍: 다음 Roaming 위치로 이동
     Trace,      // 추격: 플레이어를 쫓아간다.
     Comeback,   // 복귀: 처음 자리로 돌아간다.
     Attack,     // 공격: 일정 시간마다 플레이어를 때린다.
@@ -55,6 +57,11 @@ public class Zombie : MonoBehaviour, IDamageable
         _player = GameObject.FindGameObjectWithTag("Player");
 
         OnDeath += ZombieManager.Instance.DecreaseZombie;
+    }
+
+    private void OnDestroy()
+    {
+        OnDeath -= ZombieManager.Instance.DecreaseZombie;
     }
 
     public void Initialize(Vector3 position)
@@ -107,8 +114,8 @@ public class Zombie : MonoBehaviour, IDamageable
         }
         else
         {
+            OnDeath?.Invoke();
             _state = ZombieState.Death;
-            StartCoroutine(Death_Coroutine());
         }
     }
 
@@ -217,6 +224,6 @@ public class Zombie : MonoBehaviour, IDamageable
 
     private void Death()
     {
-        OnDeath?.Invoke();
+        StartCoroutine(Death_Coroutine());
     }
 }

@@ -1,9 +1,8 @@
+using System;
 using UnityEngine;
 
 public class ZombieManager : MonoBehaviour
 {
-    [SerializeField] private UI_ZombieCountText _uiZombieCountText;
-
     // 싱글톤 패턴
     private static ZombieManager _instance = null;
     public static ZombieManager Instance => _instance;
@@ -14,6 +13,9 @@ public class ZombieManager : MonoBehaviour
 
     public int MaxZombieCount => _maxZombieCount;
     public int ZombieCount => _zombieCount;
+
+    // 이벤트
+    public event Action OnZombieCountChanged;
 
     private void Awake()
     {
@@ -31,7 +33,6 @@ public class ZombieManager : MonoBehaviour
         GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie");
         _maxZombieCount = zombies.Length;
         _zombieCount = _maxZombieCount;
-        _uiZombieCountText.RefreshUI();
     }
 
     private void IncreaseZombie()
@@ -44,6 +45,5 @@ public class ZombieManager : MonoBehaviour
         if (_zombieCount <= 0) return;
 
         _zombieCount--;
-        _uiZombieCountText.RefreshUI();
     }
 }

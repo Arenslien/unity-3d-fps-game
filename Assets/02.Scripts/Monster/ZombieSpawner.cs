@@ -3,16 +3,23 @@ using UnityEngine;
 public class ZombieSpawner : MonoBehaviour
 {
     [SerializeField] private Zombie _zombiePrefab;
+    [SerializeField] private int _spawnCount = 1;
+    private float _spawnHeight = 1f;
 
     private void Start()
     {
-        Spawn();
+        Spawn(_spawnCount);
     }
 
-    private void Spawn()
+    private void Spawn(int count)
     {
-        Zombie zombie = Instantiate(_zombiePrefab);
-        Vector3 spawnPosition = transform.position + Vector3.up;
-        zombie.Initialize(spawnPosition);
+        for (int i = 0; i < count; i++)
+        {
+            Vector3 spawnPosition = transform.position;
+            spawnPosition.y = _spawnHeight;
+
+            Zombie zombie = Instantiate(_zombiePrefab, spawnPosition, Quaternion.identity);
+            zombie.Initialize(spawnPosition);
+        }
     }
 }
