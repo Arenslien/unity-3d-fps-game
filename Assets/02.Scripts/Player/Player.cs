@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IDamageable
@@ -12,7 +13,10 @@ public class Player : MonoBehaviour, IDamageable
     public float Health => _health;
     public float Stamina => _stamina;
 
-    [SerializeField] private UI_HitEffect _uiHitEffect;
+
+    // 이벤트 관리: 
+    public event Action OnDamaged = null;
+    public event Action OnSprint = null;
 
     private void Awake()
     {
@@ -25,7 +29,7 @@ public class Player : MonoBehaviour, IDamageable
 
         _health -= damageInfo.Damage;
 
-        _uiHitEffect.Fade(0.7f);
+        OnDamaged?.Invoke();
 
         Debug.Log($"[Player.cs] - 플레이어 피격 당함. HP: {_health}/{_maxHealth}");
 
@@ -40,6 +44,8 @@ public class Player : MonoBehaviour, IDamageable
         if (value < 0) return;
 
         _stamina = value;
+
+        OnSprint?.Invoke();
     }
 
     public void UseStamina(float value)
@@ -47,5 +53,7 @@ public class Player : MonoBehaviour, IDamageable
         if (value < 0) return;
 
         _stamina -= value;
+
+        OnSprint?.Invoke();
     }
 }
