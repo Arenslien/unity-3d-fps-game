@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ public class Zombie : MonoBehaviour, IDamageable
     [SerializeField] private float _attackRange = 1.5f; // 공격 범위
     [SerializeField] private float _attackInterval = 1.2f; // 공격 간격
     [SerializeField] private float _moveSpeed = 5f; // 이동속도
-    [SerializeField] private float _maxHealth = 30;
+    [SerializeField] private float _maxHealth = 50;
     [SerializeField] private float _health;
     [SerializeField] private float _damage = 10f;
 
@@ -39,6 +40,10 @@ public class Zombie : MonoBehaviour, IDamageable
 
     private ZombieState _state = ZombieState.Idle;
 
+    // event
+    public event Action OnDamaged = null;
+    public event Action OnDeath = null;
+
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
@@ -48,6 +53,8 @@ public class Zombie : MonoBehaviour, IDamageable
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
+        ZombieManager.Instance.IncreaseZombieCount();
+        OnDeath += ZombieManager.Instance.DecreaseZombieCount;
     }
 
     private void Update()
@@ -68,6 +75,9 @@ public class Zombie : MonoBehaviour, IDamageable
             case ZombieState.Attack:
                 Attack();
                 break;
+            case ZombieState.Death:
+                Death();
+                break;
         }
     }
 
@@ -76,6 +86,8 @@ public class Zombie : MonoBehaviour, IDamageable
         if (damageInfo.Damage < 0) return;
 
         _health -= damageInfo.Damage;
+
+        OnDamaged?.Invoke();
 
         if (_health > 0)
         {
@@ -91,7 +103,6 @@ public class Zombie : MonoBehaviour, IDamageable
         else
         {
             _state = ZombieState.Death;
-            StartCoroutine(Death_Coroutine());
         }
     }
 
@@ -196,5 +207,11 @@ public class Zombie : MonoBehaviour, IDamageable
             _player.GetComponent<Player>().TakeDamage(damageInfo);
             _attackTimer = 0f;
         }
+    }
+
+    private void Death()
+    {
+        StartCoroutine(Death_Coroutine());
+        OnDeath?.Invoke();
     }
 }
