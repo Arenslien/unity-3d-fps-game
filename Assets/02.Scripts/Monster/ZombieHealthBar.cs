@@ -19,20 +19,14 @@ public class ZombieHealthBar : MonoBehaviour
         {
             Debug.Log("[ZombieHealthBar.cs] - Slider is null");
         }
-
-        _zombie.OnDamaged += RefreshHealthBar;
-        RefreshHealthBar();
     }
 
     private void LateUpdate()
     {
-        // 빌보드: 체력바가 카메라를 쳐다보게 한다.
-        _slider.transform.forward = Camera.main.transform.forward;
-    }
-
-    private void RefreshHealthBar()
-    {
         // 0 ~ 100% --> 0 ~ 1
         _slider.value = _zombie.Health / _zombie.MaxHealth;
+
+        // 빌보드: 체력바가 카메라를 쳐다보게 한다.
+        _slider.transform.forward = Camera.main.transform.forward;
     }
 }
