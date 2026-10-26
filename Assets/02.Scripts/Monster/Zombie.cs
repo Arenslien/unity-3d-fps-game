@@ -86,6 +86,7 @@ public class Zombie : MonoBehaviour, IDamageable
         if (damageInfo.Damage < 0) return;
 
         _health -= damageInfo.Damage;
+        OnDamaged?.Invoke();
 
         if (_health > 0)
         {
