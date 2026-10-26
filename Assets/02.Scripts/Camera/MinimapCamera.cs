@@ -13,18 +13,6 @@ public class MinimapCamera : MonoBehaviour
         _camera = GetComponent<Camera>();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            _camera.orthographicSize -= 1;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            _camera.orthographicSize += 1;
-        }
-    }
-
     private void LateUpdate()
     {
         // 1. 대상의 머리 위로 위치를 옮긴다.
@@ -33,4 +21,16 @@ public class MinimapCamera : MonoBehaviour
         // 2. 대상이 쳐다보는 방향으로 회전한다.
         transform.eulerAngles = new Vector3(90, _target.eulerAngles.y, 0f);
     }
+
+    public void ZoomIn()
+    {
+        _camera.orthographicSize -= 1;
+    }
+
+    public void ZoomOut()
+    {
+        _camera.orthographicSize += 1;
+    }
+
+    // Todo. +, - 버튼 누를 때 Zoom In / Zoom Out 기능 구현하기
 }
