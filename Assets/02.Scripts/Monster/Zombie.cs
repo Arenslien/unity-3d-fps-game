@@ -47,7 +47,7 @@ public class Zombie : MonoBehaviour, IDamageable
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
-        _startPosition = transform.position;
+        Initialize(transform.position);
     }
 
     private void Start()
@@ -55,6 +55,12 @@ public class Zombie : MonoBehaviour, IDamageable
         _player = GameObject.FindGameObjectWithTag("Player");
 
         OnDeath += ZombieManager.Instance.DecreaseZombie;
+    }
+
+    public void Initialize(Vector3 position)
+    {
+        _startPosition = position;
+        transform.position = _startPosition;
     }
 
     private void Update()
