@@ -44,6 +44,9 @@ public class Zombie : MonoBehaviour, IDamageable
 
     private ZombieState _state = ZombieState.Idle;
 
+    // Animator
+    private Animator _animator;
+
     // Zombie Event Action
     public event Action OnDamaged = null;
     public event Action OnDeath = null;
@@ -51,6 +54,7 @@ public class Zombie : MonoBehaviour, IDamageable
     private void Awake()
     {
         Initialize(transform.position);
+        _animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
@@ -76,6 +80,10 @@ public class Zombie : MonoBehaviour, IDamageable
 
     private void Update()
     {
+        if (_state == ZombieState.Death) return;
+
+        _animator.SetFloat("Speed", _agent.velocity.magnitude);
+
         if (GameManager.Instance.State != GameState.Playing) return;
 
         switch (_state)
