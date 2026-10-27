@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 // FSM(유한 상태 머신) : 유한 개의 상태가 있고, 상태마다 행동을 다르게 함으로써 AI를 구현하는 방법
 
@@ -17,15 +18,17 @@ public enum ZombieState
     Death       // 죽음: 쓰러지고 잠시 뒤 사라진다.
 }
 
+
+[RequireComponent(typeof(NavMeshAgent))]
 public class Zombie : MonoBehaviour, IDamageable
 {
     [Header("스탯")]
-    [SerializeField] private float _detectDistance = 8f; // 플레이어를 발견하는 거리
-    [SerializeField] private float _combackDistance = 15f; // 처음 자리에서 멀어지면 돌아가는 거리
+    [SerializeField] private float _detectDistance = 10f; // 플레이어를 발견하는 거리
+    [SerializeField] private float _combackDistance = 30f; // 처음 자리에서 멀어지면 돌아가는 거리
     [SerializeField] private float _attackRange = 1.5f; // 공격 범위
     [SerializeField] private float _attackInterval = 1.2f; // 공격 간격
     [SerializeField] private float _moveSpeed = 5f; // 이동속도
-    [SerializeField] private float _maxHealth = 30;
+    [SerializeField] private float _maxHealth = 50;
     [SerializeField] private float _health;
     [SerializeField] private float _damage = 10f;
 
@@ -36,6 +39,7 @@ public class Zombie : MonoBehaviour, IDamageable
     private CharacterController _controller;
     private Vector3 _startPosition;
     private GameObject _player;
+    private NavMeshAgent _agent;
 
     public float Health => _health;
     public float MaxHealth => _maxHealth;
@@ -55,8 +59,11 @@ public class Zombie : MonoBehaviour, IDamageable
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
+        _agent = GetComponent<NavMeshAgent>();                  // 길을 찾아 걷게 하는 컴포넌트 NavMeshAgent 참조
 
         OnDeath += ZombieManager.Instance.DecreaseZombie;
+
+        _agent.speed = _moveSpeed;
     }
 
     private void OnDestroy()
@@ -168,16 +175,7 @@ public class Zombie : MonoBehaviour, IDamageable
             return;
         }
 
-        // 1. 방향 구하기
-        Vector3 direction = _player.transform.position - transform.position;
-        direction.y = 0;
-        direction.Normalize();
-
-        // 2. 해당 방향으로 몸 회전
-        transform.forward = direction;
-
-        // 3. 이동
-        _controller.SimpleMove(direction * _moveSpeed);
+        _agent.SetDestination(_player.transform.position);
     }
 
     private void Comeback()
@@ -188,16 +186,7 @@ public class Zombie : MonoBehaviour, IDamageable
             _state = ZombieState.Idle;
         }
 
-        // 1. 방향 구하기
-        Vector3 direction = _startPosition - transform.position;
-        direction.y = 0;
-        direction.Normalize();
-
-        // 2. 해당 방향으로 몸 회전
-        transform.forward = direction;
-
-        // 3. 이동
-        _controller.SimpleMove(direction * _moveSpeed);
+        _agent.SetDestination(_startPosition);
     }
 
     private void Attack()
