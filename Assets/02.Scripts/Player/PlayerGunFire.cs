@@ -77,8 +77,8 @@ public class PlayerGunFire : MonoBehaviour
 
             DamageInfo damageInfo = new DamageInfo();
             damageInfo.Damage = _damage;
-            damageInfo.hitPoint = hitInfo.point;
-            damageInfo.hitNormal = hitInfo.normal;
+            damageInfo.HitPoint = hitInfo.point;
+            damageInfo.HitNormal = hitInfo.normal;
 
             hitInfo.collider.GetComponent<IDamageable>()?.TakeDamage(damageInfo);
 

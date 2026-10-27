@@ -69,8 +69,8 @@ public class Drum : MonoBehaviour, IDamageable
         {
             DamageInfo damageInfo = new DamageInfo();
             damageInfo.Damage = _damage;
-            damageInfo.hitPoint = collider.ClosestPoint(transform.position);
-            damageInfo.hitNormal = (transform.position - collider.ClosestPoint(transform.position)).normalized;
+            damageInfo.HitPoint = collider.ClosestPoint(transform.position);
+            damageInfo.HitNormal = (transform.position - collider.ClosestPoint(transform.position)).normalized;
             collider.GetComponent<IDamageable>()?.TakeDamage(damageInfo);
         }
     }

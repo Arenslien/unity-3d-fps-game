@@ -120,17 +120,20 @@ public class Zombie : MonoBehaviour, IDamageable
         {
             // Todo. 맞은 부위에 피 이펙트를 실행하고 싶다.
             GameObject bloodSpray = Instantiate(_bloodSprayPrefab, transform);
-            bloodSpray.transform.position = damageInfo.hitPoint;
-            bloodSpray.transform.forward = damageInfo.hitNormal;
+            bloodSpray.transform.position = damageInfo.HitPoint;
+            bloodSpray.transform.forward = damageInfo.HitNormal;
 
             Debug.Log($"{_state} -> Hit");
             _state = ZombieState.Hit;
+            _animator.SetTrigger("Hit");
             StartCoroutine(Hit_Coroutine());
         }
         else
         {
+            _animator.SetTrigger("Death");
             OnDeath?.Invoke();
             _state = ZombieState.Death;
+            Death();
         }
     }
 
@@ -138,7 +141,7 @@ public class Zombie : MonoBehaviour, IDamageable
     {
         StopAgent();
 
-        yield return new WaitForSeconds(0.3f); // 잠깐 멈칫
+        yield return new WaitForSeconds(0.5f); // 잠깐 멈칫
 
         Debug.Log($"{_state} -> Trace");
         _state = ZombieState.Trace;
@@ -146,15 +149,13 @@ public class Zombie : MonoBehaviour, IDamageable
 
     private IEnumerator Death_Coroutine()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
 
     private void Idle()
     {
         StopAgent();
-
-        // Todo: Idle 애니메이션 추가
 
         // 플레이어가 가까워지면 Trace 상태로 전이한다.
         float distance = Vector3.Distance(transform.position, _player.transform.position);
@@ -168,8 +169,6 @@ public class Zombie : MonoBehaviour, IDamageable
 
     private void Trace()
     {
-        // Todo: Run 애니메이션 실행
-
         // 0. Comeback 조건
         float distance = Vector3.Distance(transform.position, _startPosition);
 
@@ -222,13 +221,25 @@ public class Zombie : MonoBehaviour, IDamageable
 
         if (_attackTimer >= _attackInterval)
         {
-            Debug.Log("플레이어 공격!");
-            DamageInfo damageInfo = new DamageInfo();
-            damageInfo.Damage = _damage;
-
-            _player.GetComponent<Player>().TakeDamage(damageInfo);
             _attackTimer = 0f;
+            _animator.SetTrigger("Attack");
+            Debug.Log("플레이어 공격!");
         }
+    }
+
+    public void OnAttackHit()
+    {
+        if (_state != ZombieState.Attack || Vector3.Distance(transform.position, _player.transform.position) > _attackRange) return;
+
+        DamageInfo damageInfo = new DamageInfo
+        (
+            _damage,
+            _player.transform.position,
+            (transform.position - _player.transform.position),
+            gameObject
+        );
+
+        _player.GetComponent<Player>().TakeDamage(damageInfo);
     }
 
     private void Hit()
