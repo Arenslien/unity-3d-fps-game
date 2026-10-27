@@ -18,13 +18,12 @@ public enum ZombieState
     Death       // 죽음: 쓰러지고 잠시 뒤 사라진다.
 }
 
-
 [RequireComponent(typeof(NavMeshAgent))]
 public class Zombie : MonoBehaviour, IDamageable
 {
     [Header("스탯")]
     [SerializeField] private float _detectDistance = 10f; // 플레이어를 발견하는 거리
-    [SerializeField] private float _combackDistance = 30f; // 처음 자리에서 멀어지면 돌아가는 거리
+    [SerializeField] private float _comebackDistance = 30f; // 처음 자리에서 멀어지면 돌아가는 거리
     [SerializeField] private float _attackRange = 1.5f; // 공격 범위
     [SerializeField] private float _attackInterval = 1.2f; // 공격 간격
     [SerializeField] private float _moveSpeed = 5f; // 이동속도
@@ -36,7 +35,6 @@ public class Zombie : MonoBehaviour, IDamageable
     [SerializeField] private GameObject _bloodSprayPrefab;
 
     private float _attackTimer = 1.2f;
-    private CharacterController _controller;
     private Vector3 _startPosition;
     private GameObject _player;
     private NavMeshAgent _agent;
@@ -52,7 +50,6 @@ public class Zombie : MonoBehaviour, IDamageable
 
     private void Awake()
     {
-        _controller = GetComponent<CharacterController>();
         Initialize(transform.position);
     }
 
@@ -95,6 +92,9 @@ public class Zombie : MonoBehaviour, IDamageable
             case ZombieState.Attack:
                 Attack();
                 break;
+            case ZombieState.Hit:
+                Hit();
+                break;
             case ZombieState.Death:
                 Death();
                 break;
@@ -128,7 +128,10 @@ public class Zombie : MonoBehaviour, IDamageable
 
     private IEnumerator Hit_Coroutine()
     {
+        StopAgent();
+
         yield return new WaitForSeconds(0.3f); // 잠깐 멈칫
+
         Debug.Log($"{_state} -> Trace");
         _state = ZombieState.Trace;
     }
@@ -141,6 +144,8 @@ public class Zombie : MonoBehaviour, IDamageable
 
     private void Idle()
     {
+        StopAgent();
+
         // Todo: Idle 애니메이션 추가
 
         // 플레이어가 가까워지면 Trace 상태로 전이한다.
@@ -160,7 +165,7 @@ public class Zombie : MonoBehaviour, IDamageable
         // 0. Comeback 조건
         float distance = Vector3.Distance(transform.position, _startPosition);
 
-        if (distance > _detectDistance)
+        if (distance > _comebackDistance)
         {
             Debug.Log($"{_state} -> Comeback");
             _state = ZombieState.Comeback;
@@ -175,12 +180,17 @@ public class Zombie : MonoBehaviour, IDamageable
             return;
         }
 
+        // SetDestination은 목적지 설정
+        // - 호출할 때마다 목적지를 향해 조금씩 이동 (X)
+        // - 한 번 세팅하면 내부에서 계속해서 이동  (O)
         _agent.SetDestination(_player.transform.position);
     }
 
     private void Comeback()
     {
-        if (Vector3.Distance(_startPosition, transform.position) < 1f)
+        // if (_agent.remainingDistance <= _agent.stoppingDistance)
+        // if (_agent.pathStatus == NavMeshPathStatus.PathComplete)
+        if (Vector3.Distance(_startPosition, transform.position) < _agent.stoppingDistance)
         {
             Debug.Log($"{_state} -> Idle");
             _state = ZombieState.Idle;
@@ -191,6 +201,8 @@ public class Zombie : MonoBehaviour, IDamageable
 
     private void Attack()
     {
+        StopAgent();
+
         if (Vector3.Distance(transform.position, _player.transform.position) > _attackRange)
         {
             Debug.Log($"{_state} -> Trace");
@@ -211,8 +223,21 @@ public class Zombie : MonoBehaviour, IDamageable
         }
     }
 
+    private void Hit()
+    {
+        StartCoroutine(Hit_Coroutine());
+    }
+
+
     private void Death()
     {
+        StopAgent();
         StartCoroutine(Death_Coroutine());
+    }
+
+    private void StopAgent()
+    {
+        _agent.ResetPath(); // 에이전트의 목적지 삭제
+        _agent.velocity = Vector3.zero;
     }
 }
