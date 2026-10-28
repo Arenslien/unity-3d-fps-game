@@ -102,15 +102,12 @@ public class Zombie : MonoBehaviour, IDamageable
             case ZombieState.Hit:
                 Hit();
                 break;
-            case ZombieState.Death:
-                Death();
-                break;
         }
     }
 
     public void TakeDamage(DamageInfo damageInfo)
     {
-        if (damageInfo.Damage < 0) return;
+        if (damageInfo.Damage <= 0 || _health <= 0) return;
 
         _health -= damageInfo.Damage;
         OnDamaged?.Invoke();
@@ -129,8 +126,6 @@ public class Zombie : MonoBehaviour, IDamageable
         }
         else
         {
-            _animator.SetTrigger("Death");
-            OnDeath?.Invoke();
             _state = ZombieState.Death;
             Death();
         }
@@ -228,7 +223,8 @@ public class Zombie : MonoBehaviour, IDamageable
 
     public void OnAttackHit()
     {
-        if (_state != ZombieState.Attack || Vector3.Distance(transform.position, _player.transform.position) > _attackRange) return;
+        bool isInAttackRange = Vector3.Distance(transform.position, _player.transform.position) > _attackRange;
+        if (_state != ZombieState.Attack || isInAttackRange) return;
 
         DamageInfo damageInfo = new DamageInfo
         (
@@ -246,10 +242,11 @@ public class Zombie : MonoBehaviour, IDamageable
         StartCoroutine(Hit_Coroutine());
     }
 
-
     private void Death()
     {
         StopAgent();
+        _animator.SetTrigger("Death");
+        OnDeath?.Invoke();
         StartCoroutine(Death_Coroutine());
     }
 
