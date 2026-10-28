@@ -32,33 +32,38 @@ public class PlayerGunFire : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.State != GameState.Playing) return;
+        // 게임 중이 아니면 쏘는 동작 정지, 행동 그만
+        if (GameManager.Instance.State != GameState.Playing)
+        {
+            _animator.SetBool("Fire", false);
+            return;
+        }
 
-        // 0. 발사 타이머를 지난 시간만큼 줄인다.
+        // 1. 발사 타이머를 지난 시간만큼 줄인다.
         _fireTimer -= Time.deltaTime;
 
-        // 1. 마우스 왼쪽 버튼 입력 받기
+        // 2. 커서가 숨어 있고, 버튼을 누르고 있고, 총알이 남아 있는 동안은 쏘는 동작
         bool isMouseVisible = Cursor.visible;
-        if (!isMouseVisible && Input.GetButton("Fire1") && _fireTimer <= 0f && _bulletCount > 0) // 0(왼), 1(오), 2(휠) 
+        bool isFiring = !isMouseVisible && Input.GetButton("Fire1") && _bulletCount > 0;
+        _animator.SetBool("Fire", isFiring);
+
+        // 3. 쏘는 중 & 쏠 때가 되었으면 쏜다.
+        if (isFiring && _fireTimer <= 0f) // 0(왼), 1(오), 2(휠) 
         {
-            _fireTimer = _fireInterval;
-            Shoot();
-
-            if (_animator.GetFloat("MoveMotion") == 0f)
-            {
-                _animator.SetTrigger("Attack");
-            }
-
-            // StopAllCoroutines();
+            // 재장전 취소
             if (_reloadCoroutine != null)
             {
                 StopCoroutine(_reloadCoroutine);
                 _reloadCoroutine = null;
                 Debug.Log("재장전 취소!");
             }
+
+            _fireTimer = _fireInterval;
+            Shoot();
+            // StopAllCoroutines();
         }
 
-        // 2. 장전 기능
+        // 4. 장전 기능
         if (Input.GetButtonDown("Reload") && _reloadCoroutine == null)
         {
             _reloadCoroutine = StartCoroutine(Reload_Coroutine());
