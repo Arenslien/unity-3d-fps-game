@@ -9,10 +9,12 @@ public class Player : MonoBehaviour, IDamageable
     private float _stamina = MaxStamina;
     private float _health;
 
+    private Animator _animator;
+    private int _injuredLayerIndex;
+
     public float MaxHealth => _maxHealth;
     public float Health => _health;
     public float Stamina => _stamina;
-
 
     // 이벤트 관리: 
     public event Action OnDamaged = null;
@@ -21,6 +23,8 @@ public class Player : MonoBehaviour, IDamageable
     private void Awake()
     {
         _health = _maxHealth;
+        _animator = GetComponentInChildren<Animator>();
+        _injuredLayerIndex = _animator.GetLayerIndex("Injured Layer");
     }
 
     public void TakeDamage(DamageInfo damageInfo)
@@ -28,6 +32,11 @@ public class Player : MonoBehaviour, IDamageable
         if (damageInfo.Damage <= 0 || _health <= 0) return;
 
         _health -= damageInfo.Damage;
+
+        // 체력에 따라 Injured Layer의 가중치를 수정
+        float healthPercent = _health / _maxHealth;
+        float injured = Mathf.InverseLerp(0.5f, 0f, healthPercent);
+        _animator.SetLayerWeight(_injuredLayerIndex, injured);
 
         OnDamaged?.Invoke();
 
