@@ -63,7 +63,6 @@ public class Zombie : MonoBehaviour, IDamageable
         _agent = GetComponent<NavMeshAgent>();                  // 길을 찾아 걷게 하는 컴포넌트 NavMeshAgent 참조
 
         OnDeath += ZombieManager.Instance.DecreaseZombie;
-
         _agent.speed = _moveSpeed;
     }
 

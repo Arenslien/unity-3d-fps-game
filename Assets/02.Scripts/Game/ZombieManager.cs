@@ -15,7 +15,7 @@ public class ZombieManager : MonoBehaviour
     public int ZombieCount => _zombieCount;
 
     // 이벤트
-    public event Action OnZombieCountChanged;
+    public event Action OnZombieCountChanged = null;
 
     private void Awake()
     {
@@ -33,11 +33,13 @@ public class ZombieManager : MonoBehaviour
         GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie");
         _maxZombieCount = zombies.Length;
         _zombieCount = _maxZombieCount;
+        OnZombieCountChanged?.Invoke();
     }
 
     private void IncreaseZombie()
     {
         _zombieCount++;
+        OnZombieCountChanged?.Invoke();
     }
 
     public void DecreaseZombie()
@@ -45,5 +47,6 @@ public class ZombieManager : MonoBehaviour
         if (_zombieCount <= 0) return;
 
         _zombieCount--;
+        OnZombieCountChanged?.Invoke();
     }
 }
