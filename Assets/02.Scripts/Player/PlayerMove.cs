@@ -27,10 +27,14 @@ public class PlayerMove : MonoBehaviour
     // 플레이어
     private Player _player;
 
+    // 애니메이터
+    private Animator _animator;
+
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
         _player = GetComponent<Player>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
@@ -51,6 +55,9 @@ public class PlayerMove : MonoBehaviour
         // 2. 키보드 입력에 따라 방향을 구한다.
         Vector3 direction = new Vector3(h, 0f, v);
         direction.Normalize();
+
+        _animator.SetFloat("MoveMotion", direction.magnitude);
+
         direction = transform.TransformDirection(direction);
         // Local  좌표계: 한 대상을 중심
         // Global 좌표계: 세상을 중심
