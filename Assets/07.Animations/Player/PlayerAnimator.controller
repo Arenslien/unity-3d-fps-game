@@ -238,7 +238,7 @@ BlendTree:
   m_BlendParameterY: MoveMotion
   m_MinThreshold: 0
   m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 1
+  m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
 --- !u!1101 &6255775160877076086
