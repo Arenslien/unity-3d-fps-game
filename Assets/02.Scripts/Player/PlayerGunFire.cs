@@ -6,6 +6,8 @@ using UnityEngine;
 public class PlayerGunFire : MonoBehaviour
 {
     [SerializeField] private ParticleSystem _hitEffectPrefab;
+    [SerializeField] private GameObject[] _muzzleFlashes;
+    [SerializeField] private float _flashTime = 0.05f;
 
     [Header("스탯")]
     [SerializeField] private float _range = 100f;
@@ -79,6 +81,9 @@ public class PlayerGunFire : MonoBehaviour
 
     private void Shoot()
     {
+        // 0. Muzzle Flash 코루틴 함수 호출
+        StartCoroutine(MuzzleFlash_Coroutine());
+
         Transform cameraTransform = Camera.main.transform;
         // 2. 레이(광선)를 생성하고 발사될 위치와 진행 방향 설정
         Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
@@ -128,5 +133,17 @@ public class PlayerGunFire : MonoBehaviour
 
         OnChangedBullet?.Invoke();
         Debug.Log("재장전 종료");
+    }
+
+    private IEnumerator MuzzleFlash_Coroutine()
+    {
+        int randomIndex = UnityEngine.Random.Range(0, _muzzleFlashes.Length);
+
+        GameObject flash = _muzzleFlashes[randomIndex];
+        flash.SetActive(true);
+
+        yield return new WaitForSeconds(_flashTime);
+
+        flash.SetActive(false);
     }
 }
