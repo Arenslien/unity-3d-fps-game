@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -14,15 +15,20 @@ public class PlayerGunFire : MonoBehaviour
     private float _fireTimer = 0f;
 
     // 탄창 기능
-    [SerializeField] private int _maxBulletCount = 30;
+    [SerializeField] private int _maxBulletCount = 50;
     private int _bulletCount = 0;
     private const float ReloadingTime = 3f;
+    public int MaxBulletCount => _maxBulletCount;
+    public int BulletCount => _bulletCount;
 
     // 재장전 코루틴
     private Coroutine _reloadCoroutine = null;
 
     // 애니메이터 변수 필드
     private Animator _animator;
+
+    // 이벤트
+    public event Action OnFire = null;
 
     private void Awake()
     {
@@ -60,6 +66,7 @@ public class PlayerGunFire : MonoBehaviour
 
             _fireTimer = _fireInterval;
             Shoot();
+            OnFire?.Invoke();
             // StopAllCoroutines();
         }
 
