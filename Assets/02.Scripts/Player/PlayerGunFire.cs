@@ -28,7 +28,7 @@ public class PlayerGunFire : MonoBehaviour
     private Animator _animator;
 
     // 이벤트
-    public event Action OnFire = null;
+    public event Action OnChangedBullet = null;
 
     private void Awake()
     {
@@ -66,7 +66,7 @@ public class PlayerGunFire : MonoBehaviour
 
             _fireTimer = _fireInterval;
             Shoot();
-            OnFire?.Invoke();
+            OnChangedBullet?.Invoke();
             // StopAllCoroutines();
         }
 
@@ -126,6 +126,7 @@ public class PlayerGunFire : MonoBehaviour
         _bulletCount = _maxBulletCount;
         _reloadCoroutine = null;
 
+        OnChangedBullet?.Invoke();
         Debug.Log("재장전 종료");
     }
 }

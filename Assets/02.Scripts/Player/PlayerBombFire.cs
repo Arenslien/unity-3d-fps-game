@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
 // 목표: 마우스 오른쪽 클릭 시 : 시선이 바라보는 방향으로 수류탄 투척
@@ -10,6 +10,7 @@ public class PlayerBombFire : MonoBehaviour
     // 폭탄 개수
     private const int MaxBombCount = 10;
     private int _bombCount = MaxBombCount;
+    public int BombCount => _bombCount;
 
     // 폭탄 게이지
     private const float MaxBombGauge = 10f;
@@ -24,6 +25,9 @@ public class PlayerBombFire : MonoBehaviour
     private bool _isCharging;
 
     private Player _player;
+
+    // Bomb Action
+    public event Action OnBombFire = null;
 
     private void Awake()
     {
@@ -69,6 +73,7 @@ public class PlayerBombFire : MonoBehaviour
             Throw();
             _bombCount--;
             _bombGauge = 1f;
+            OnBombFire?.Invoke();
         }
     }
 

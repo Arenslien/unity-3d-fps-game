@@ -10,16 +10,19 @@ public class UI_PlayerWeapons : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _bombText;
 
     private PlayerGunFire _playerGunFire;
+    private PlayerBombFire _playerBombFire;
 
     private void Start()
     {
         Player.Instance.OnWeaponChange += RefreshWeaponImage;
         _playerGunFire = Player.Instance.GetComponent<PlayerGunFire>();
-        _playerGunFire.OnFire += RefreshBulletCount;
-    }
+        _playerBombFire = Player.Instance.GetComponent<PlayerBombFire>();
 
-    private void Update()
-    {
+        _playerGunFire.OnChangedBullet += RefreshBulletCount;
+        _playerBombFire.OnBombFire += RefreshBombCount;
+
+        RefreshBulletCount();
+        RefreshBombCount();
     }
 
     private void RefreshWeaponImage()
@@ -32,5 +35,10 @@ public class UI_PlayerWeapons : MonoBehaviour
     private void RefreshBulletCount()
     {
         _bulletText.text = $"{_playerGunFire.BulletCount}/{_playerGunFire.MaxBulletCount}";
+    }
+
+    private void RefreshBombCount()
+    {
+        _bombText.text = $"폭탄 {_playerBombFire.BombCount}";
     }
 }

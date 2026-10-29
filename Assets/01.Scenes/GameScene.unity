@@ -130,12 +130,12 @@ GameObject:
   - component: {fileID: 22159665}
   - component: {fileID: 22159664}
   - component: {fileID: 22159663}
-  - component: {fileID: 22159666}
-  - component: {fileID: 22159667}
   - component: {fileID: 22159668}
+  - component: {fileID: 22159672}
+  - component: {fileID: 22159667}
+  - component: {fileID: 22159666}
   - component: {fileID: 22159669}
   - component: {fileID: 22159671}
-  - component: {fileID: 22159672}
   - component: {fileID: 22159673}
   m_Layer: 7
   m_Name: Player
