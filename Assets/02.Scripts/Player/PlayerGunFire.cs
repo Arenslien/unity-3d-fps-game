@@ -9,6 +9,11 @@ public class PlayerGunFire : MonoBehaviour
     [SerializeField] private GameObject[] _muzzleFlashes;
     [SerializeField] private float _flashTime = 0.05f;
 
+    [Header("총알 궤적")]
+    [SerializeField] private LineRenderer _tracerLine;
+    [SerializeField] private Transform _muzzlePoint;
+    [SerializeField] private float _tracerTime = 0.05f;
+
     [Header("스탯")]
     [SerializeField] private float _range = 100f;
 
@@ -94,8 +99,12 @@ public class PlayerGunFire : MonoBehaviour
         // 4. 레이를 발사하고, 만일 부딪힌 물체가 있다면 이펙트 표시
         bool isHit = Physics.Raycast(ray, out hitInfo, _range);
 
+        // 맞지 않았다면 사거리 끝까지 궤적을 그린다.
+        Vector3 endPoint = ray.origin + ray.direction * _range;
+
         if (isHit)
         {
+            endPoint = hitInfo.point;
             ParticleSystem effect = Instantiate(_hitEffectPrefab);
             effect.transform.position = hitInfo.point;
             effect.transform.forward = hitInfo.normal;
@@ -118,7 +127,10 @@ public class PlayerGunFire : MonoBehaviour
             // hitInfo.collider.GetComponent<Box>()?.TakeDamage(_damage);
         }
 
-        // 5. 총알 소모
+        // 5. 총구에서 맞은 지점까지 궤적 표시
+        StartCoroutine(Tracer_Coroutine(endPoint));
+
+        // 6. 총알 소모
         _bulletCount--;
     }
 
@@ -133,6 +145,17 @@ public class PlayerGunFire : MonoBehaviour
 
         OnChangedBullet?.Invoke();
         Debug.Log("재장전 종료");
+    }
+
+    private IEnumerator Tracer_Coroutine(Vector3 endPoint)
+    {
+        _tracerLine.SetPosition(0, _muzzlePoint.position);
+        _tracerLine.SetPosition(1, endPoint);
+        _tracerLine.enabled = true;
+
+        yield return new WaitForSeconds(_tracerTime);
+
+        _tracerLine.enabled = false;
     }
 
     private IEnumerator MuzzleFlash_Coroutine()
