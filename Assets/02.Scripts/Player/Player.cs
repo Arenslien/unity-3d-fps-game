@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IDamageable
 {
+    // 싱글톤 패턴
+    private static Player _instance = null;
+    public static Player Instance => _instance;
+
     [Header("스탯")]
     [SerializeField] private float _maxHealth = 100f;
     public const float MaxStamina = 100f;
@@ -22,12 +26,21 @@ public class Player : MonoBehaviour, IDamageable
     // 이벤트 관리: 
     public event Action OnDamaged = null;
     public event Action OnSprint = null;
+    public event Action OnWeaponChange = null;
 
     private void Awake()
     {
         _health = _maxHealth;
         _animator = GetComponentInChildren<Animator>();
         _injuredLayerIndex = _animator.GetLayerIndex("Injured Layer");
+
+        if (_instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
     }
 
     public void Update()
@@ -35,10 +48,12 @@ public class Player : MonoBehaviour, IDamageable
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             _weaponMode = WeaponMode.Normal;
+            OnWeaponChange?.Invoke();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             _weaponMode = WeaponMode.Sniper;
+            OnWeaponChange?.Invoke();
         }
     }
 
