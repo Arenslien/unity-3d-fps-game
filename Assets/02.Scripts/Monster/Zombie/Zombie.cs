@@ -147,7 +147,7 @@ public class Zombie : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
-    private void Idle()
+    public void Idle()
     {
         StopAgent();
 
@@ -161,7 +161,7 @@ public class Zombie : MonoBehaviour, IDamageable
         }
     }
 
-    private void Trace()
+    public void Trace()
     {
         // 0. Comeback 조건
         float distance = Vector3.Distance(transform.position, _startPosition);
@@ -187,7 +187,7 @@ public class Zombie : MonoBehaviour, IDamageable
         _agent.SetDestination(_player.transform.position);
     }
 
-    private void Comeback()
+    public void Comeback()
     {
         // if (_agent.remainingDistance <= _agent.stoppingDistance)
         // if (_agent.pathStatus == NavMeshPathStatus.PathComplete)
@@ -200,7 +200,7 @@ public class Zombie : MonoBehaviour, IDamageable
         _agent.SetDestination(_startPosition);
     }
 
-    private void Attack()
+    public void Attack()
     {
         StopAgent();
 
@@ -237,12 +237,12 @@ public class Zombie : MonoBehaviour, IDamageable
         _player.GetComponent<Player>().TakeDamage(damageInfo);
     }
 
-    private void Hit()
+    public void Hit()
     {
         StartCoroutine(Hit_Coroutine());
     }
 
-    private void Death()
+    public void Death()
     {
         StopAgent();
         _animator.SetTrigger("Death");
