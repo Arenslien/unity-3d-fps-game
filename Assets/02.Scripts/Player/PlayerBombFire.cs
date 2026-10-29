@@ -23,10 +23,13 @@ public class PlayerBombFire : MonoBehaviour
     private int _bombLayerIndex;
     private bool _isCharging;
 
+    private Player _player;
+
     private void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
         _bombLayerIndex = _animator.GetLayerIndex("Bomb Layer");
+        _player = GetComponent<Player>();
     }
 
     private void Update()
@@ -34,7 +37,7 @@ public class PlayerBombFire : MonoBehaviour
         if (GameManager.Instance.State != GameState.Playing) return;
 
         // 1. 마우스 오른쪽 버튼을 누르면 팔 젖히기 애니메이션 시작
-        if (Input.GetButtonDown("Fire2") && _bombCount > 0)
+        if (Input.GetButtonDown("Fire2") && _bombCount > 0 && _player.WeaponMode == WeaponMode.Normal)
         {
             _isCharging = true;
             _animator.SetFloat("BombSpeed", 1f);
@@ -42,7 +45,7 @@ public class PlayerBombFire : MonoBehaviour
         }
 
         // 2. 길게 누를 수록 게이지 충전, 애니메이션은 젖힌 자세에서 멈춘다
-        if (_isCharging && Input.GetButton("Fire2"))
+        if (_isCharging && Input.GetButton("Fire2") && _player.WeaponMode == WeaponMode.Normal)
         {
             if (_bombGauge < MaxBombGauge)
             {

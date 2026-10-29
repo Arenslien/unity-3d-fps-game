@@ -16,6 +16,9 @@ public class Player : MonoBehaviour, IDamageable
     public float Health => _health;
     public float Stamina => _stamina;
 
+    private WeaponMode _weaponMode = WeaponMode.Normal;
+    public WeaponMode WeaponMode => _weaponMode;
+
     // 이벤트 관리: 
     public event Action OnDamaged = null;
     public event Action OnSprint = null;
@@ -25,6 +28,18 @@ public class Player : MonoBehaviour, IDamageable
         _health = _maxHealth;
         _animator = GetComponentInChildren<Animator>();
         _injuredLayerIndex = _animator.GetLayerIndex("Injured Layer");
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            _weaponMode = WeaponMode.Normal;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            _weaponMode = WeaponMode.Sniper;
+        }
     }
 
     public void TakeDamage(DamageInfo damageInfo)
