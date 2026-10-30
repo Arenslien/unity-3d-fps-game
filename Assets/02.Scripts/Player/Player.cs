@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerMeleeAttack))]
 public class Player : MonoBehaviour, IDamageable
 {
     // 싱글톤 패턴
@@ -58,7 +57,6 @@ public class Player : MonoBehaviour, IDamageable
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            Debug.Log("근접 모드 변경");
             _weaponMode = WeaponMode.Melee;
             OnWeaponChange?.Invoke();
         }

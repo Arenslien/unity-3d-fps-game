@@ -137,7 +137,6 @@ GameObject:
   - component: {fileID: 22159669}
   - component: {fileID: 22159671}
   - component: {fileID: 22159673}
-  - component: {fileID: 22159674}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -350,18 +349,6 @@ MonoBehaviour:
   _sniperZoom: {fileID: 1507519461}
   _normalFov: 60
   _zoomFov: 15
---- !u!114 &22159674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 22159661}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e657503067afaa41a168cd9491e0f0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerMeleeAttack
 --- !u!1001 &111246286
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -782,6 +769,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7db0b01f0507b7e45b3b4de61ed4df11, type: 3}
       propertyPath: m_Name
       value: BlueSciFiSword
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7db0b01f0507b7e45b3b4de61ed4df11, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2123,6 +2114,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MarineModel
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b28ace75b57a34947bea14eb9b80bec7, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -2136,6 +2131,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b28ace75b57a34947bea14eb9b80bec7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 538608910}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b28ace75b57a34947bea14eb9b80bec7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 538608912}
   m_SourcePrefab: {fileID: 100100000, guid: b28ace75b57a34947bea14eb9b80bec7, type: 3}
 --- !u!4 &538608908 stripped
 Transform:
@@ -2174,6 +2172,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2890340462180134544, guid: b28ace75b57a34947bea14eb9b80bec7, type: 3}
   m_PrefabInstance: {fileID: 538608907}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &538608912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 538608909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e657503067afaa41a168cd9491e0f0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMeleeAttack
+  _swordCollider: {fileID: 994688398}
 --- !u!4 &546234988 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2775867743691239627, guid: 69d00c89af905744f9d998222f828c60, type: 3}
@@ -3321,6 +3332,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 100060, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 400060, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3612,6 +3627,7 @@ GameObject:
   - component: {fileID: 994688397}
   - component: {fileID: 994688398}
   - component: {fileID: 994688399}
+  - component: {fileID: 994688400}
   m_Layer: 2
   m_Name: Blade
   m_TagString: Untagged
@@ -3649,9 +3665,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.13, y: 0.05, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -3682,6 +3698,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &994688400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994688396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0fbf58ced2d34e4b8d8d738784d1140, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sword
+  _damage: 25
 --- !u!1 &1020163327
 GameObject:
   m_ObjectHideFlags: 0
