@@ -14,11 +14,6 @@ public class Sword : MonoBehaviour
         _player = GetComponentInParent<Player>();
     }
 
-    public void ResetHits()
-    {
-        _hitTargets.Clear();
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         // 자기 자신(플레이어)은 베지 않는다

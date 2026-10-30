@@ -28,8 +28,8 @@ public class Zombie : MonoBehaviour, IDamageable
     [SerializeField] private float _attackInterval = 1.2f; // 공격 간격
     [SerializeField] private float _moveSpeed = 5f; // 이동속도
     [SerializeField] private float _maxHealth = 50;
-    [SerializeField] private float _health;
     [SerializeField] private float _damage = 10f;
+    private float _health;
 
     [Header("이펙트")]
     [SerializeField] private GameObject _bloodSprayPrefab;
@@ -55,6 +55,7 @@ public class Zombie : MonoBehaviour, IDamageable
     {
         Initialize(transform.position);
         _animator = GetComponentInChildren<Animator>();
+        _health = _maxHealth;
     }
 
     private void Start()

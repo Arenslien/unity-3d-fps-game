@@ -4,8 +4,7 @@ using UnityEngine.UI;
 
 public class UI_PlayerWeapons : MonoBehaviour
 {
-    [SerializeField] private GameObject _rifleImage;
-    [SerializeField] private GameObject _sniperImage;
+    [SerializeField] private GameObject[] _weaponImages;
     [SerializeField] private TextMeshProUGUI _bulletText;
     [SerializeField] private TextMeshProUGUI _bombText;
 
@@ -27,9 +26,12 @@ public class UI_PlayerWeapons : MonoBehaviour
 
     private void RefreshWeaponImage()
     {
-        bool isRifle = Player.Instance.WeaponMode == WeaponMode.Normal;
-        _rifleImage.SetActive(isRifle);
-        _sniperImage.SetActive(!isRifle);
+        int current = (int)Player.Instance.WeaponMode;
+
+        for (int i = 0; i < _weaponImages.Length; i++)
+        {
+            _weaponImages[i].SetActive(i == current);
+        }
     }
 
     private void RefreshBulletCount()
