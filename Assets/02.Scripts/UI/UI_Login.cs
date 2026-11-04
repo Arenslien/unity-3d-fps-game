@@ -2,7 +2,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // 로그인 화면. 로그인 모드와 회원가입 모드를 바꾸고, 입력을 확인해 AccountStorage에 부탁한다.
@@ -64,7 +63,8 @@ public class UI_Login : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab)) MoveToNextInput(!(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)));
+        if (Input.GetKeyDown(KeyCode.Tab))
+            MoveToNextInput(!(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)));
     }
 
     // Tab이면 다음 입력칸으로, Shift+Tab이면 이전 입력칸으로 옮긴다. 끝에서는 반대쪽 끝으로 돌아간다.
@@ -226,7 +226,7 @@ public class UI_Login : MonoBehaviour
     private IEnumerator LoadGame_Coroutine()
     {
         yield return new WaitForSecondsRealtime(_loadDelay);
-        SceneManager.LoadScene(_gameSceneName);
+        SceneLoader.Load(_gameSceneName);  // 로딩 씬을 거쳐 게임 씬으로 간다.
     }
 
     // 회원가입: 입력을 확인하고, 문제가 없으면 계정을 저장한 뒤 로그인 모드로 돌아간다.
