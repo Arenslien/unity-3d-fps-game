@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Animator _playerAnimator;
     [SerializeField] private CursorManager _cursorManager;
     [SerializeField] private GameObject _optionPopup;
+    [SerializeField] private GameObject _gameOverPopup;
 
     private void Awake()
     {
@@ -73,11 +74,9 @@ public class GameManager : MonoBehaviour
     {
         _state = GameState.GameOver;
 
-        _stateText.gameObject.SetActive(true);
-        _stateText.text = "게임오버";
-        _stateText.color = Color.red;
-
-        _playerAnimator.SetFloat("MoveMotion", 0f);
+        Time.timeScale = 0f;
+        _gameOverPopup.SetActive(true);
+        _cursorManager.UnlockCursor();
     }
 
     public void Pause()
