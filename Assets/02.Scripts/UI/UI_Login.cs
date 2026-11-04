@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -40,6 +41,14 @@ public class UI_Login : MonoBehaviour
     [Header("메시지 타이핑")]
     [SerializeField] private float _typeInterval = 0.035f;  // 글자 하나가 나오는 간격
     [SerializeField] private float _typeStartDelay = 0.12f; // 도장이 찍힌 뒤 타이핑을 시작하기까지의 시간
+
+    // ID는 이메일 형식이어야 한다. 앞부분과 도메인의 각 마디는 '.'이 처음·끝·연속으로 오지 못하고, 마지막 마디는 영문 2글자 이상.
+    private static readonly Regex EmailRegex = new Regex(
+        @"^[A-Za-z0-9_%+-]+(\.[A-Za-z0-9_%+-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}\z");
+
+    // 비밀번호는 8~30글자이고, 대문자·소문자·기호(영문·숫자·공백이 아닌 글자)를 각각 하나 이상 포함해야 한다.
+    private static readonly Regex PasswordRegex = new Regex(
+        @"^(?=.*[A-Z])(?=.*[a-z])(?=.*[^A-Za-z0-9\s]).{8,30}\z");
 
     private Mode _mode = Mode.Login;
     private bool _isLoading;  // 로그인에 성공해 씬을 불러오는 중
@@ -238,6 +247,20 @@ public class UI_Login : MonoBehaviour
             bool onlyConfirmEmpty = !string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(password);
             ShowMessage(onlyConfirmEmpty ? "Please confirm your password." : "Please enter your ID and password.");
             PlayEmptyFieldErrors(true);
+            return;
+        }
+
+        if (!EmailRegex.IsMatch(id))
+        {
+            ShowMessage("ID must be a valid email address.");
+            PlayInputError(_idInput);
+            return;
+        }
+
+        if (!PasswordRegex.IsMatch(password))
+        {
+            ShowMessage("Password: 8-30 chars, upper, lower & symbol.");
+            PlayInputError(_passwordInput);
             return;
         }
 
